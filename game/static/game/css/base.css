@@ -1,0 +1,45 @@
+body {
+    background-color: #622E20;
+    text-align: center;
+    margin: 0;
+}
+
+#page {
+    background-color: grey;
+    padding: 20px 30px;
+    border-radius: 20px;
+    margin: 20px auto;
+    max-width: 600px; 
+}
+
+ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 5px 0;
+}
+
+#players {
+    background-color: lightgrey;
+    width: 200px;
+    text-align: center;
+    justify-self: center;
+    padding: 1px 0;
+    border: 4px solid black;
+    margin: 10px;
+}
+
+h2 {
+    margin: 8px 0;
+}
+#players li {
+    color: #525252;
+}
+
+h1 {
+    margin: 0;
+}
+
+.hidden {
+    display: none;
+}
+

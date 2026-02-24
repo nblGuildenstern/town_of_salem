@@ -1,0 +1,57 @@
+.role-card, .added-card {
+    padding: 6px;
+    margin-bottom: 6px;
+    background: #eee;
+    border-radius: 6px;
+    border-color: black;
+    border-style: solid;
+    border-width: 1px;
+    text-align: center;
+}
+
+.added-card {
+    display: flex;
+    justify-content: space-between;
+}
+
+
+[data-team="town"] {
+    background-color: #18C243;
+    color: black;
+}
+[data-team="mafia"] {
+    background-color: #9B2121;
+    color: white;
+}
+[data-name*="Jester"] {
+    background-color: pink;
+    color: black;
+}
+[data-name*="Serial Killer"] {
+    background-color: darkblue;
+    color: white;
+}
+[data-name*="Vampire"] {
+    background-color: grey;
+    color: white;
+}
+[data-name*="Witch"] {
+    background-color: purple;
+    color: white;
+}
+[data-name*="Werewolf"] {
+    background-color: #66441A;
+    color: white;
+}
+[data-name*="Hypnotist"] {
+    background-color: #9835AC;
+    color: white;
+}
+[data-name*="Executioner"] {
+    background-color: grey;
+    color: white;
+}
+[data-name*="Amnesiac"] {
+    background-color: lightblue;
+    color: black;
+}

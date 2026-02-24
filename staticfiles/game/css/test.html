@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lobby</title>
+    <link rel="stylesheet" href="lobby.css">
+    <link rel="stylesheet" href="roles.css">
+    <link rel="stylesheet" href="base.css">
+    <script>
+        function addRole(element) {
+            const list = document.getElementById("added-roles");
+            const virtueValue = document.getElementById("virtue-value");
+
+            const roleId = element.dataset.id;
+            const virtue = parseInt(element.dataset.virtue);
+
+            const template = document.getElementById("added-role-template");
+
+            const node = template.content.cloneNode(true);
+
+            const card = node.querySelector(".added-card");
+            const name = node.querySelector(".name");
+            const input = node.querySelector(".role-input");
+
+            name.textContent = element.dataset.name;
+
+            card.dataset.team = element.dataset.team;
+            card.dataset.name = element.dataset.name;
+            card.dataset.virtue = virtue;
+            const removeBtn = card.querySelector(".remove-btn");
+            removeBtn.addEventListener("click", () => removeRole(card));
+            input.value = roleId;
+            input.id = `role-input-${roleId}`;
+
+            list.appendChild(node);
+
+            virtueValue.textContent =
+                parseInt(virtueValue.textContent) + virtue;
+        }
+
+        function removeRole(element) {
+            const virtueValue = document.getElementById("virtue-value");
+
+            virtueValue.innerHTML =
+                parseInt(virtueValue.innerHTML) - parseInt(element.dataset.virtue);
+
+            element.remove(); // ✅ removes BOTH div + hidden input automatically
+        }
+        function filterRoles(team) {
+            const cards = document.querySelectorAll('.role-card');
+
+            cards.forEach(card => {
+                if (team === 'all' || card.dataset.team === team) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+    </script>
+</head>
+<body>
+    <div id="page"> 
+        <h1>Lobby</h1>
+        
+        <div id="players">
+            <ul id="player-list" data-my-id="{{ player.id }}">
+                <li>Kryton (Narrator)</li>
+                <li>Cambree</li>
+                <li>Andrew</li>
+                <li>Camille</li>
+            </ul>
+        </div>
+        
+        <form method="POST" id="controls" class="hidden" hidden>
+            <div id="categories">
+                <button type="button" onclick="filterRoles('all')">All</button>
+                <button type="button" onclick="filterRoles('town')">Town</button>
+                <button type="button" onclick="filterRoles('mafia')">Mafia</button>
+                <button type="button" onclick="filterRoles('neutral')">Neutral</button>
+            </div>
+            <div id="info">
+                <div id="virtue-box">
+                    <p id="virtue-value">0</p>
+                </div>
+                <div id="buttons">
+                    <button class="sub-button" type="submit">Start Game</button>
+                </div>
+            </div>
+            
+            <!-- RIGHT SIDE (roles list) -->
+            <div id="roles">
+                <div class="role-card" data-virtue="4" data-name="Bodyguard" data-team="town" onclick="addRole(this)">
+                    Bodyguard
+                </div>
+                <div class="role-card" data-virtue="4" data-name="Godfather" data-team="mafia" onclick="addRole(this)">
+                    Godfather
+                </div>
+                <div class="role-card" data-virtue="4" data-name="Jester" data-team="neutral" onclick="addRole(this)">
+                    Jester
+                </div>
+                <div class="role-card" data-virtue="4" data-name="Vampire" data-team="neutral" onclick="addRole(this)">
+                    Vampire
+                </div>
+                <div class="role-card" data-virtue="4" data-name="Serial Killer" data-team="neutral" onclick="addRole(this)">
+                    Serial Killer
+                </div>
+                <div class="role-card" data-virtue="4" data-name="Witch" data-team="neutral" onclick="addRole(this)">
+                    Witch
+                </div>
+            </div>
+            <div id="added-roles" name="added-roles">
+            </div>        
+        </form>
+        
+        <template id="added-role-template">
+            <div class="added-card">
+                <button class="remove-btn" type="button">✕</button>
+                <span class="name"></span>
+                <input type="hidden" name="roles" class="role-input">
+                <input type="checkbox" name="hidden" class="hidden-role">
+            </div>
+        </template>
+    </div>
+</body>
+</html>

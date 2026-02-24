@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game</title>
+    <link rel="stylesheet" href="base.css">
+    <link rel="stylesheet" href="roles.css">
+    <link rel="stylesheet" href="game.css">
+</head>
+<body>
+    <div id="page">
+        <div id="phase-section">
+            <h1 id="phase">Night</h1>
+            <h2 id="secondary-phase">Role goes here</h2>
+        </div>
+        <div id="action-section">
+            
+        </div>
+        
+        <div id="players">
+            <h2>Players</h2>
+            <ul id="player-list" data-my-id="{{ player.id }}">
+                <li>Kryton (Narrator)</li>
+                <li data-alive="true">Cambree</li>
+                <li data-alive="true">Andrew</li>
+                <li data-alive="false">Camille</li>
+            </ul>
+        </div>
+        
+        <div id="roles">
+            <h2>Roles</h2>
+            <div class="role-card" data-virtue="4" data-name="Bodyguard" data-team="town">
+                Bodyguard
+            </div>
+            <div class="role-card" data-virtue="4" data-name="Godfather" data-team="mafia">
+                Godfather
+            </div>
+            <div class="role-card" data-virtue="4" data-name="Jester" data-team="neutral">
+                Jester
+            </div>
+            <div class="role-card" data-virtue="4" data-name="Vampire" data-team="neutral">
+                Vampire
+            </div>
+            <div class="role-card" data-virtue="4" data-name="Serial Killer" data-team="neutral">
+                Serial Killer
+            </div>
+            <div class="role-card" data-virtue="4" data-name="Witch" data-team="neutral">
+                Witch
+            </div>
+        </div>
+
+        <form method="POST">
+            <button type="submit">Advance Night</button>
+        </form>
+        
+        <div id="templates">
+            <template id="advance-form">
+                <form method="POST">
+                    <input type="text" name="name" placeholder="Enter your name">
+                    <button type="submit">Join</button>
+                </form>
+            </template>
+        </div>
+    </div>
+</body>
+</html>

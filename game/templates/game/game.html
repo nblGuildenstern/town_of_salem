@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'game/css/base.css' %}">
+    <link rel="stylesheet" href="{% static 'game/css/roles.css' %}">
+    <link rel="stylesheet" href="{% static 'game/css/game.css' %}">
+
+    <script>
+        window.LOBBY_DATA = {
+            playerId: "{{ request.session.player_id }}"
+        };
+    </script>
+    <script src="{% static 'game/js/game.js' %}" defer></script>
+</head>
+<body>
+    <div id="page">
+        
+        <div id="phase-section">
+            <h1 id="phase">Night</h1>
+            <h2 id="secondary-phase">{{ game.current_role.name|default:"Role should be here" }}</h2>
+            <div id="night-abilities">
+
+                {% if player.role.team == "mafia" %}
+                    {% if player.role.name ==  high_mafia.name %}
+                        <form method="POST">
+                            {% csrf_token %}
+                            <input type="hidden" name="action" value="mafia_kill">
+                            
+                            <div id="bodyguard-ui" class="night-role-ui hidden">
+                                {% for p in players %}
+                                    {% if p.is_alive %}
+                                    <div class="action-picker">
+                                        <input type="radio" name="target_id" value="{{ p.id }}">
+                                        {{ p.name }}
+                                    </div>
+                                    {% endif %}
+                                {% endfor %}
+                                
+                                <button type="submit">Heal</button>
+                            </div>
+                        </form>
+                    {% endif %}
+                {% endif %}
+
+                {% if player.role.name == "Bodyguard" %}
+                <form method="POST">
+                    {% csrf_token %}
+                    <input type="hidden" name="action" value="bodyguard_protect">
+                    
+                    <div id="bodyguard-ui" class="night-role-ui hidden">
+                        {% for p in players %}
+                        {% if p.is_alive %}
+                        <div class="action-picker">
+                            <input type="radio" name="target_id" value="{{ p.id }}">
+                            {{ p.name }}
+                        </div>
+                        {% endif %}
+                        {% endfor %}
+                        
+                        <button type="submit">Heal</button>
+                    </div>
+                </form>
+                {% endif %}
+                
+                {% if player.role.name == "Investigator" %}
+                <form method="POST">
+                    {% csrf_token %}
+                    <input type="hidden" name="action" value="investigator_investigate">
+                    
+                    <div id="investigator-ui" class="night-role-ui hidden">
+                        {% for p in players %}
+                        {% if p.is_alive %}
+                        <div class="action-picker">
+                            <input type="radio" name="target_id" value="{{ p.id }}">
+                            {{ p.name }}
+                        </div>
+                        {% endif %}
+                        {% endfor %}
+                        
+                        <button type="submit">Heal</button>
+                    </div>
+                </form>
+                {% endif %}
+                
+                {% if player.role.name == "Doctor" %}
+                    <form method="POST">
+                        {% csrf_token %}
+                        <input type="hidden" name="action" value="doctor_heal">
+
+                        <div id="doctor-ui" class="night-role-ui hidden">
+                            {% for p in players %}
+                                {% if p.is_alive %}
+                                    <div class="action-picker">
+                                        <input type="radio" name="target_id" value="{{ p.id }}">
+                                        {{ p.name }}
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+
+                            <button type="submit">Heal</button>
+                        </div>
+                    </form>
+                {% endif %}
+
+                {% if player.role.name == "Medium" %}
+                    <form method="POST">
+                        {% csrf_token %}
+                        <input type="hidden" name="action" value="medium_seance">
+
+                        <div id="medium-ui" class="night-role-ui hidden">
+                            {% for p in players %}
+                                {% if p.is_alive %}
+                                    <div class="action-picker">
+                                        <input type="radio" name="target_id" value="{{ p.id }}">
+                                        {{ p.name }}
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+
+                            <button type="submit">Heal</button>
+                        </div>
+                    </form>
+                {% endif %}
+
+                {% if player.role.name == "Sheriff" %}
+                    <form method="POST">
+                        {% csrf_token %}
+                        <input type="hidden" name="action" value="sheriff_investigate">
+
+                        <div id="sheriff-ui" class="night-role-ui hidden">
+                            {% for p in players %}
+                                {% if p.is_alive %}
+                                    <div class="action-picker">
+                                        <input type="radio" name="target_id" value="{{ p.id }}">
+                                        {{ p.name }}
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+
+                            <button type="submit">Heal</button>
+                        </div>
+                    </form>
+                {% endif %}
+
+                {% if player.role.name == "Vigilante" %}
+                    <form method="POST">
+                        {% csrf_token %}
+                        <input type="hidden" name="action" value="vigilante_shot">
+
+                        <div id="vigilante" class="night-role-ui hidden">
+                            {% for p in players %}
+                                {% if p.is_alive %}
+                                    <div class="action-picker">
+                                        <input type="radio" name="target_id" value="{{ p.id }}">
+                                        {{ p.name }}
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+
+                            <button type="submit">Heal</button>
+                        </div>
+                    </form>
+                {% endif %}
+
+                {% if player.role.name == "Decoy" %}
+                    <form method="POST">
+                        {% csrf_token %}
+                        <input type="hidden" name="action" value="decoy_decoy">
+
+                        <div id="decoy-ui" class="night-role-ui hidden">
+                            {% for p in players %}
+                                {% if p.is_alive %}
+                                    <div class="action-picker">
+                                        <input type="radio" name="target_id" value="{{ p.id }}">
+                                        {{ p.name }}
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+
+                            <button type="submit">Heal</button>
+                        </div>
+                    </form>
+                {% endif %}
+
+                {% if player.role.name == "Transporter" %}
+                    <form method="POST">
+                        {% csrf_token %}
+                        <input type="hidden" name="action" value="transporter_transport">
+
+                        <div id="transporter-ui" class="night-role-ui hidden">
+                            {% for p in players %}
+                                {% if p.is_alive %}
+                                    <div class="action-picker">
+                                        <input type="radio" name="target_id" value="{{ p.id }}">
+                                        {{ p.name }}
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+
+                            <button type="submit">Heal</button>
+                        </div>
+                    </form>
+                {% endif %}
+
+                {% if player.role.name == "Veteran" %}
+                    <form method="POST">
+                        {% csrf_token %}
+                        <input type="hidden" name="action" value="veteran_alert">
+
+                        <div id="veteran-ui" class="night-role-ui hidden">
+                            {% for p in players %}
+                                {% if p.is_alive %}
+                                    <div class="action-picker">
+                                        <input type="radio" name="target_id" value="{{ p.id }}">
+                                        {{ p.name }}
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+
+                            <button type="submit">Heal</button>
+                        </div>
+                    </form>
+                {% endif %}
+
+                {% if player.role.name == "Blackmailer" %}
+                    <form method="POST">
+                        {% csrf_token %}
+                        <input type="hidden" name="action" value="blackmailer_blackmail">
+
+                        <div id="blackmailer" class="night-role-ui hidden">
+                            {% for p in players %}
+                                {% if p.is_alive %}
+                                    <div class="action-picker">
+                                        <input type="radio" name="target_id" value="{{ p.id }}">
+                                        {{ p.name }}
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+
+                            <button type="submit">Heal</button>
+                        </div>
+                    </form>
+                {% endif %}
+
+                {% if player.role.name == "Consigliere" %}
+                    <form method="POST">
+                        {% csrf_token %}
+                        <input type="hidden" name="action" value="consigliere_investigate">
+
+                        <div id="consigliere-ui" class="night-role-ui hidden">
+                            {% for p in players %}
+                                {% if p.is_alive %}
+                                    <div class="action-picker">
+                                        <input type="radio" name="target_id" value="{{ p.id }}">
+                                        {{ p.name }}
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+
+                            <button type="submit">Heal</button>
+                        </div>
+                    </form>
+                {% endif %}
+
+                {% if player.role.name == "Janitor" %}
+                    <form method="POST">
+                        {% csrf_token %}
+                        <input type="hidden" name="action" value="janitor_clean">
+
+                        <div id="janitor-ui" class="night-role-ui hidden">
+                            {% for p in players %}
+                                {% if p.is_alive %}
+                                    <div class="action-picker">
+                                        <input type="radio" name="target_id" value="{{ p.id }}">
+                                        {{ p.name }}
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+
+                            <button type="submit">Heal</button>
+                        </div>
+                    </form>
+                {% endif %}
+
+                {% if player.role.name == "Framer" %}
+                    <form method="POST">
+                        {% csrf_token %}
+                        <input type="hidden" name="action" value="framer_frame">
+
+                        <div id="framer-ui" class="night-role-ui hidden">
+                            {% for p in players %}
+                                {% if p.is_alive %}
+                                    <div class="action-picker">
+                                        <input type="radio" name="target_id" value="{{ p.id }}">
+                                        {{ p.name }}
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+
+                            <button type="submit">Heal</button>
+                        </div>
+                    </form>
+                {% endif %}
+
+                {% if player.role.name == "Saboteur" %}
+                    <form method="POST">
+                        {% csrf_token %}
+                        <input type="hidden" name="action" value="saboteur_sabotage">
+
+                        <div id="saboteur-ui" class="night-role-ui hidden">
+                            {% for p in players %}
+                                {% if p.is_alive %}
+                                    <div class="action-picker">
+                                        <input type="radio" name="target_id" value="{{ p.id }}">
+                                        {{ p.name }}
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+
+                            <button type="submit">Heal</button>
+                        </div>
+                    </form>
+                {% endif %}
+
+                {% if player.role.name == "Serial Killer" %}
+                    <form method="POST">
+                        {% csrf_token %}
+                        <input type="hidden" name="action" value="sk_kill">
+
+                        <div id="serial-killer-ui" class="night-role-ui hidden">
+                            {% for p in players %}
+                                {% if p.is_alive %}
+                                    <div class="action-picker">
+                                        <input type="radio" name="target_id" value="{{ p.id }}">
+                                        {{ p.name }}
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+
+                            <button type="submit">Heal</button>
+                        </div>
+                    </form>
+                {% endif %}
+
+                {% if player.role.name == "Hypnotist" %}
+                    <form method="POST">
+                        {% csrf_token %}
+                        <input type="hidden" name="action" value="hypnotist_hypnotize">
+
+                        <div id="hypnotist-ui" class="night-role-ui hidden">
+                            {% for p in players %}
+                                {% if p.is_alive %}
+                                    <div class="action-picker">
+                                        <input type="radio" name="target_id" value="{{ p.id }}">
+                                        {{ p.name }}
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+
+                            <button type="submit">Heal</button>
+                        </div>
+                    </form>
+                {% endif %}
+
+                {% if player.role.name == "Amnesiac" %}
+                    <form method="POST">
+                        {% csrf_token %}
+                        <input type="hidden" name="action" value="amnesiac_remember">
+
+                        <div id="amnesiac-ui" class="night-role-ui hidden">
+                            {% for p in players %}
+                                {% if p.is_alive %}
+                                    <div class="action-picker">
+                                        <input type="radio" name="target_id" value="{{ p.id }}">
+                                        {{ p.name }}
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+
+                            <button type="submit">Heal</button>
+                        </div>
+                    </form>
+                {% endif %}
+
+                {% if player.role.name == "Werewolf" %}
+                    <form method="POST">
+                        {% csrf_token %}
+                        <input type="hidden" name="action" value="werewolf_attack">
+
+                        <div id="werewolf-ui" class="night-role-ui hidden">
+                            {% for p in players %}
+                                {% if p.is_alive %}
+                                    <div class="action-picker">
+                                        <input type="radio" name="target_id" value="{{ p.id }}">
+                                        {{ p.name }}
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+
+                            <button type="submit">Heal</button>
+                        </div>
+                    </form>
+                {% endif %}
+
+                {% if player.role.name == "Witch" %}
+                    <form method="POST">
+                        {% csrf_token %}
+                        <input type="hidden" name="action" value="witch_curse">
+
+                        <div id="witch-ui" class="night-role-ui hidden">
+                            {% for p in players %}
+                                {% if p.is_alive %}
+                                    <div class="action-picker">
+                                        <input type="radio" name="target_id" value="{{ p.id }}">
+                                        {{ p.name }}
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+
+                            <button type="submit">Heal</button>
+                        </div>
+                    </form>
+                {% endif %}
+
+                {% if player.role.name == "Executioner" %}
+                    <form method="POST">
+                        {% csrf_token %}
+                        <input type="hidden" name="action" value="executioner_target">
+
+                        <div id="executioner" class="night-role-ui hidden">
+                            {% for p in players %}
+                                {% if p.is_alive %}
+                                    <div class="action-picker">
+                                        <input type="radio" name="target_id" value="{{ p.id }}">
+                                        {{ p.name }}
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+
+                            <button type="submit">Heal</button>
+                        </div>
+                    </form>
+                {% endif %}
+            </div>
+        </div>
+        <div id="action-section">
+            
+        </div>
+        
+        <div id="players">
+            <h2>Players</h2>
+            <ul id="player-list" data-my-id="{{ player.id }}">
+            </ul>
+        </div>
+        
+        <div id="roles">
+            <h2>Roles</h2>
+            {% for role in roles %}
+            <div class="role-card" data-id="{{ role.id }}" data-virtue="{{ role.virtue }}" data-name="{{ role.name }}" data-team="{{ role.team }}">
+                {{ role.name }}
+            </div>
+            {% endfor %}
+        </div>
+
+        <button type="button" id="advanceBtn">Advance Night</button>
+        
+    </div>
+</body>
+</html>
